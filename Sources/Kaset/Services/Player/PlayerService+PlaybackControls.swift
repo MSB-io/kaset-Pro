@@ -366,6 +366,11 @@ extension PlayerService {
             return
         }
 
+        if self.duration > 0, clampedTime >= self.duration - Self.seekToEndThreshold {
+            await self.handleManualSeekToEnd()
+            return
+        }
+
         self.clearRestoredPlaybackSessionState()
         if self.pendingPlayVideoId != nil {
             SingletonPlayerWebView.shared.seek(to: clampedTime)
