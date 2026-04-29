@@ -4,10 +4,10 @@
 set -euo pipefail
 
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-APP_BUNDLE="${ROOT_DIR}/.build/app/Kaset.app"
-APP_PROCESS_PATTERN="Kaset.app/Contents/MacOS/Kaset"
-DEBUG_PROCESS_PATTERN="${ROOT_DIR}/.build/debug/Kaset"
-RELEASE_PROCESS_PATTERN="${ROOT_DIR}/.build/release/Kaset"
+APP_BUNDLE="${ROOT_DIR}/.build/app/JustUs.app"
+APP_PROCESS_PATTERN="JustUs.app/Contents/MacOS/JustUs"
+DEBUG_PROCESS_PATTERN="${ROOT_DIR}/.build/debug/JustUs"
+RELEASE_PROCESS_PATTERN="${ROOT_DIR}/.build/release/JustUs"
 LOCK_KEY="$(printf '%s' "${ROOT_DIR}" | shasum -a 256 | cut -c1-8)"
 LOCK_DIR="${TMPDIR:-/tmp}/kaset-compile-and-run-${LOCK_KEY}"
 LOCK_PID_FILE="${LOCK_DIR}/pid"

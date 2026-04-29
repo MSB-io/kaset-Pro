@@ -88,7 +88,13 @@ struct MiniPlayerWebView: NSViewRepresentable {
                     
                     // Fast-forward unskippable ads
                     const adVideo = document.querySelector('.ad-showing video') || document.querySelector('.video-ads video');
-                    if (adVideo && adVideo.duration) { adVideo.currentTime = adVideo.duration; }
+                    if (adVideo) {
+                        adVideo.muted = true; // Instantly mute so you don't hear the start of the ad
+                        adVideo.playbackRate = 16.0; // Max speed in case seeking is blocked
+                        if (adVideo.duration && !isNaN(adVideo.duration)) {
+                            adVideo.currentTime = adVideo.duration;
+                        }
+                    }
                     
                     // Hide banners
                     const banners = document.querySelectorAll('.yt-viewport-location-bottom, .ytp-ad-overlay-container, ytmusic-background-overlay-renderer');

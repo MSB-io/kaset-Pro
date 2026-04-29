@@ -11,7 +11,7 @@ let package = Package(
     ],
     products: [
         .executable(
-            name: "Kaset",
+            name: "JustUs",
             targets: ["Kaset"]
         ),
         .executable(
