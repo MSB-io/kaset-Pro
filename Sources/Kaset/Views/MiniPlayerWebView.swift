@@ -94,7 +94,7 @@ struct MiniPlayerWebView: NSViewRepresentable {
                     const banners = document.querySelectorAll('.yt-viewport-location-bottom, .ytp-ad-overlay-container, ytmusic-background-overlay-renderer');
                     banners.forEach(b => b.style.display = 'none');
                 } catch(e) {}
-            }, 250);
+            }, 10);
 
             function log(msg) {
                 console.log('[MiniPlayer] ' + msg);
