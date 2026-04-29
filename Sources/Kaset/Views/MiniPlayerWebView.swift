@@ -79,6 +79,23 @@ struct MiniPlayerWebView: NSViewRepresentable {
 
             const bridge = window.webkit.messageHandlers.miniPlayer;
 
+            // AD AUTO-SKIPPER
+            setInterval(function() {
+                try {
+                    // Click skip buttons
+                    const skipBtn = document.querySelector('.ytp-ad-skip-button, .ytp-ad-skip-button-modern, .ytp-skip-ad-button');
+                    if (skipBtn) { skipBtn.click(); }
+                    
+                    // Fast-forward unskippable ads
+                    const adVideo = document.querySelector('.ad-showing video') || document.querySelector('.video-ads video');
+                    if (adVideo && adVideo.duration) { adVideo.currentTime = adVideo.duration; }
+                    
+                    // Hide banners
+                    const banners = document.querySelectorAll('.yt-viewport-location-bottom, .ytp-ad-overlay-container, ytmusic-background-overlay-renderer');
+                    banners.forEach(b => b.style.display = 'none');
+                } catch(e) {}
+            }, 250);
+
             function log(msg) {
                 console.log('[MiniPlayer] ' + msg);
             }
