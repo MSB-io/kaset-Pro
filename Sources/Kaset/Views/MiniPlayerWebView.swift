@@ -82,13 +82,22 @@ struct MiniPlayerWebView: NSViewRepresentable {
             // AD AUTO-SKIPPER
             setInterval(function() {
                 try {
-                    // Click skip buttons
-                    const skipBtn = document.querySelector('.ytp-ad-skip-button, .ytp-ad-skip-button-modern, .ytp-skip-ad-button');
-                    if (skipBtn) { skipBtn.click(); }
+                    const video = document.querySelector('video');
+                    const isAdShowing = document.querySelector('.ad-showing') || document.querySelector('.video-ads video');
                     
-                    // Fast-forward unskippable ads
-                    const adVideo = document.querySelector('.ad-showing video') || document.querySelector('.video-ads video');
-                    if (adVideo && adVideo.duration) { adVideo.currentTime = adVideo.duration; }
+                    if (isAdShowing && video) {
+                        video.muted = true; // Instantly mute the ad
+                        
+                        // Click skip buttons
+                        const skipBtn = document.querySelector('.ytp-ad-skip-button, .ytp-ad-skip-button-modern, .ytp-skip-ad-button');
+                        if (skipBtn) { skipBtn.click(); }
+                        
+                        // Fast-forward unskippable ads
+                        const adVideo = document.querySelector('.ad-showing video') || document.querySelector('.video-ads video');
+                        if (adVideo && adVideo.duration) { adVideo.currentTime = adVideo.duration; }
+                    } else if (!isAdShowing && video && video.muted) {
+                        video.muted = false; // Restore sound for the actual song
+                    }
                     
                     // Hide banners
                     const banners = document.querySelectorAll('.yt-viewport-location-bottom, .ytp-ad-overlay-container, ytmusic-background-overlay-renderer');
