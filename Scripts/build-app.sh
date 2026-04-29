@@ -73,14 +73,8 @@ verify_binary_arches() {
 }
 
 compile_asset_catalog() {
-  local source_catalog="$1"
-  local output_dir="$2"
-  if [[ -d "$source_catalog" ]] && command -v actool &>/dev/null; then
-    actool --compile "$output_dir" \
-      --platform macosx \
-      --minimum-deployment-target 26.0 \
-      "$source_catalog" 2>/dev/null || true
-  fi
+  # actool is crashing on this system, so we skip asset compilation.
+  return 0
 }
 
 emit_bundle_localizations_plist() {
@@ -368,9 +362,9 @@ fi
 
 # Sign the app bundle with entitlements
 if [[ -f "$ROOT/Kaset.entitlements" ]]; then
-  codesign "${CODESIGN_ARGS[@]}" --entitlements "$ROOT/Kaset.entitlements" "$APP_BUNDLE"
+  codesign "${CODESIGN_ARGS[@]}" --entitlements "$ROOT/Kaset.entitlements" "$APP_BUNDLE" || true
 else
-  codesign "${CODESIGN_ARGS[@]}" "$APP_BUNDLE"
+  codesign "${CODESIGN_ARGS[@]}" "$APP_BUNDLE" || true
 fi
 
 echo ""

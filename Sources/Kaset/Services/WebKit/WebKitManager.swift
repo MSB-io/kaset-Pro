@@ -230,6 +230,46 @@ final class WebKitManager: NSObject, WebKitManagerProtocol {
         // Enable AirPlay for streaming to Apple TV, HomePod, etc.
         configuration.allowsAirPlayForMediaPlayback = true
 
+        // Configure network-level ad blocking
+        let adBlockRules = """
+        [
+            {
+                "trigger": { "url-filter": ".*youtube\\\\.com/api/stats/ads.*" },
+                "action": { "type": "block" }
+            },
+            {
+                "trigger": { "url-filter": ".*doubleclick\\\\.net.*" },
+                "action": { "type": "block" }
+            },
+            {
+                "trigger": { "url-filter": ".*googleads\\\\.g\\\\.doubleclick\\\\.net.*" },
+                "action": { "type": "block" }
+            },
+            {
+                "trigger": { "url-filter": ".*youtube\\\\.com/pagead/.*" },
+                "action": { "type": "block" }
+            },
+            {
+                "trigger": { "url-filter": ".*youtube\\\\.com/ptracking.*" },
+                "action": { "type": "block" }
+            }
+        ]
+        """
+        
+        WKContentRuleListStore.default().compileContentRuleList(
+            forIdentifier: "YouTubeMusicAdBlocker",
+            encodedContentRuleList: adBlockRules
+        ) { [weak self] ruleList, error in
+            if let error {
+                self?.logger.error("AdBlock compiler error: \\(error.localizedDescription)")
+                return
+            }
+            if let ruleList {
+                configuration.userContentController.add(ruleList)
+                self?.logger.info("AdBlock rules successfully attached to WebView configuration")
+            }
+        }
+
         return configuration
     }
 
