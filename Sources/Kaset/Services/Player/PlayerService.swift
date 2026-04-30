@@ -163,8 +163,15 @@ final class PlayerService: NSObject, PlayerServiceProtocol {
             if self.showQueue, self.showLyrics {
                 self.showLyrics = false
             }
+            // Reset expansion when closing
+            if !self.showQueue {
+                self.expandQueue = false
+            }
         }
     }
+
+    /// Whether the queue panel is expanded to fill the content area.
+    var expandQueue: Bool = false
 
     /// Whether the current track has video available.
     var currentTrackHasVideo: Bool = false

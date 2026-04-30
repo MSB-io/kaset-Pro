@@ -333,8 +333,8 @@ struct MainWindow: View {
                     }
                 }
                 .frame(maxHeight: .infinity)
-                .frame(width: (self.playerService.showLyrics && self.playerService.expandLyrics) ? nil : 280)
-                .frame(maxWidth: (self.playerService.showLyrics && self.playerService.expandLyrics) ? .infinity : 280)
+                .frame(width: ((self.playerService.showLyrics && self.playerService.expandLyrics) || (self.playerService.showQueue && self.playerService.expandQueue)) ? nil : (self.playerService.showQueue && self.playerService.queueDisplayMode == .sidepanel ? 400 : 280))
+                .frame(maxWidth: ((self.playerService.showLyrics && self.playerService.expandLyrics) || (self.playerService.showQueue && self.playerService.expandQueue)) ? .infinity : (self.playerService.showQueue && self.playerService.queueDisplayMode == .sidepanel ? 400 : 280))
                 .padding(.top, 12)
                 .padding(.bottom, 76) // Space for PlayerBar
                 .transition(.move(edge: .trailing).combined(with: .opacity))

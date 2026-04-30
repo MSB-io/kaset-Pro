@@ -49,7 +49,8 @@ struct QueueSidePanelView: View {
 
             QueueFooterActions()
         }
-        .frame(width: 400)
+        .frame(width: self.playerService.expandQueue ? nil : 400)
+        .frame(maxWidth: self.playerService.expandQueue ? .infinity : 400)
         .background(.regularMaterial)
         .clipShape(RoundedRectangle(cornerRadius: 20))
         .accessibilityIdentifier(AccessibilityID.Queue.container)
@@ -606,6 +607,19 @@ private struct QueueSidePanelHeader: View {
                 .font(.caption)
                 .foregroundStyle(.secondary)
 
+            // Expand button
+            Button {
+                withAnimation(.spring(duration: 0.35, bounce: 0.15)) {
+                    self.playerService.expandQueue.toggle()
+                }
+            } label: {
+                Image(systemName: self.playerService.expandQueue ? "arrow.down.right.and.arrow.up.left" : "arrow.up.left.and.arrow.down.right")
+            }
+            .buttonStyle(.plain)
+            .foregroundStyle(.secondary)
+            .help(self.playerService.expandQueue ? String(localized: "Collapse") : String(localized: "Expand"))
+            .padding(.leading, 4)
+
             Button {
                 self.playerService.toggleQueueDisplayMode()
             } label: {
@@ -614,6 +628,7 @@ private struct QueueSidePanelHeader: View {
                     .foregroundStyle(.secondary)
             }
             .buttonStyle(.plain)
+            .padding(.leading, 4)
             .help(String(localized: "Close side panel"))
             .accessibilityLabel(String(localized: "Close side panel"))
         }

@@ -24,11 +24,13 @@ struct QueueView: View {
                 // Content
                 self.contentView
             }
-            .frame(width: 280)
+            .frame(width: self.playerService.expandQueue ? nil : 280)
+            .frame(maxWidth: self.playerService.expandQueue ? .infinity : 280)
             .glassEffect(.regular.interactive(), in: .rect(cornerRadius: 20))
             .glassEffectID("queuePanel", in: self.queueNamespace)
         }
         .glassEffectTransition(.materialize)
+        .animation(.spring(duration: 0.35, bounce: 0.15), value: self.playerService.expandQueue)
         .accessibilityIdentifier(AccessibilityID.Queue.container)
     }
 
@@ -42,7 +44,6 @@ struct QueueView: View {
 
             Spacer()
 
-            // Clear queue button (only show if there are items beyond the current track)
             if self.playerService.queue.count > 1 {
                 Button {
                     self.playerService.clearQueue()
@@ -55,6 +56,19 @@ struct QueueView: View {
                 .accessibilityIdentifier(AccessibilityID.Queue.clearButton)
             }
 
+            // Expand button
+            Button {
+                withAnimation(.spring(duration: 0.35, bounce: 0.15)) {
+                    self.playerService.expandQueue.toggle()
+                }
+            } label: {
+                Image(systemName: self.playerService.expandQueue ? "arrow.down.right.and.arrow.up.left" : "arrow.up.left.and.arrow.down.right")
+            }
+            .buttonStyle(.plain)
+            .foregroundStyle(.secondary)
+            .help(self.playerService.expandQueue ? String(localized: "Collapse") : String(localized: "Expand"))
+            .padding(.leading, 4)
+
             Button {
                 self.playerService.toggleQueueDisplayMode()
             } label: {
@@ -63,6 +77,7 @@ struct QueueView: View {
                     .foregroundStyle(.secondary)
             }
             .buttonStyle(.plain)
+            .padding(.leading, 4)
             .help(String(localized: "Open queue in side panel"))
             .accessibilityLabel(String(localized: "Open queue in side panel"))
         }
