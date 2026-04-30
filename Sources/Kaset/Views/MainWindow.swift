@@ -320,7 +320,7 @@ struct MainWindow: View {
         let showRightSidebar = self.playerService.showLyrics || self.playerService.showQueue
 
         if showRightSidebar {
-            VStack {
+            VStack(spacing: 0) {
                 Spacer()
 
                 Group {
