@@ -94,7 +94,6 @@ struct HomeSectionItemCard: View {
                         Image(systemName: "play.fill")
                             .font(.title2)
                             .foregroundStyle(.primary)
-                            .offset(x: 2)
                     }
                     .transition(.scale.combined(with: .opacity))
             }
