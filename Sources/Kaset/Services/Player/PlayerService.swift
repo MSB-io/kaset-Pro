@@ -143,8 +143,15 @@ final class PlayerService: NSObject, PlayerServiceProtocol {
             if self.showLyrics, self.showQueue {
                 self.showQueue = false
             }
+            // Reset expansion when closing
+            if !self.showLyrics {
+                self.expandLyrics = false
+            }
         }
     }
+
+    /// Whether the lyrics panel is expanded to fill the content area.
+    var expandLyrics: Bool = false
 
     /// Display mode for the queue panel (popup vs side panel).
     var queueDisplayMode: QueueDisplayMode = .popup

@@ -36,11 +36,13 @@ struct LyricsView: View {
                 // Content
                 self.contentView
             }
-            .frame(width: 280)
+            .frame(width: self.playerService.expandLyrics ? nil : 280)
+            .frame(maxWidth: self.playerService.expandLyrics ? .infinity : 280)
             .glassEffect(.regular.interactive(), in: .rect(cornerRadius: 20))
             .glassEffectID("lyricsPanel", in: self.lyricsNamespace)
         }
         .glassEffectTransition(.materialize)
+        .animation(.spring(duration: 0.35, bounce: 0.15), value: self.playerService.expandLyrics)
         .onChange(of: self.playerService.currentTrack?.videoId) { _, newVideoId in
             if let videoId = newVideoId, videoId != lastLoadedVideoId {
                 // Reset explanation when track changes
@@ -115,6 +117,19 @@ struct LyricsView: View {
                 .requiresIntelligence()
                 .disabled(self.isExplaining)
             }
+
+            // Expand button
+            Button {
+                withAnimation(.spring(duration: 0.35, bounce: 0.15)) {
+                    self.playerService.expandLyrics.toggle()
+                }
+            } label: {
+                Image(systemName: self.playerService.expandLyrics ? "arrow.down.right.and.arrow.up.left" : "arrow.up.left.and.arrow.down.right")
+            }
+            .buttonStyle(.plain)
+            .foregroundStyle(.secondary)
+            .help(self.playerService.expandLyrics ? String(localized: "Collapse") : String(localized: "Expand"))
+            .padding(.leading, 4)
         }
         .padding(.horizontal, 16)
         .padding(.vertical, 14)

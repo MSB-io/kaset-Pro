@@ -283,6 +283,9 @@ struct MainWindow: View {
                 Sidebar(selection: self.$navigationSelection)
             } detail: {
                 self.detailView(for: self.navigationSelection, client: self.client)
+                    .overlay(alignment: .trailing) {
+                        self.rightSidebarOverlay(client: self.client)
+                    }
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
             .onReceive(NotificationCenter.default.publisher(for: NSWindow.didBecomeKeyNotification)) { _ in
@@ -291,9 +294,6 @@ struct MainWindow: View {
                     self.columnVisibility = .all
                 }
             }
-
-            // Right sidebar overlay - either lyrics or queue (mutually exclusive)
-            self.rightSidebarOverlay(client: self.client)
         }
         .animation(.easeInOut(duration: 0.25), value: self.playerService.showLyrics)
         .animation(.easeInOut(duration: 0.25), value: self.playerService.showQueue)
@@ -335,13 +335,15 @@ struct MainWindow: View {
                     }
                 }
                 .frame(maxHeight: .infinity)
+                .frame(width: (self.playerService.showLyrics && self.playerService.expandLyrics) ? nil : 280)
+                .frame(maxWidth: (self.playerService.showLyrics && self.playerService.expandLyrics) ? .infinity : 280)
                 .padding(.top, 12)
                 .padding(.bottom, 76) // Space for PlayerBar
                 .transition(.move(edge: .trailing).combined(with: .opacity))
 
                 Spacer()
             }
-            .padding(.trailing, 16)
+            .padding(.horizontal, 16)
         }
     }
 
