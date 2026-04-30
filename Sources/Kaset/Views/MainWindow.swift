@@ -339,7 +339,7 @@ struct MainWindow: View {
                 .padding(.bottom, 76) // Space for PlayerBar
                 .transition(.move(edge: .trailing).combined(with: .opacity))
             }
-            .frame(maxWidth: .infinity)
+            .frame(maxWidth: .infinity, alignment: .trailing)
             .padding(.horizontal, 16)
         }
     }
