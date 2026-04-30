@@ -299,7 +299,6 @@ struct MainWindow: View {
                     self.columnVisibility = .all
                 }
             }
-        }
         .animation(.easeInOut(duration: 0.25), value: self.playerService.showLyrics)
         .animation(.easeInOut(duration: 0.25), value: self.playerService.showQueue)
         .frame(minWidth: 900, minHeight: 600)
