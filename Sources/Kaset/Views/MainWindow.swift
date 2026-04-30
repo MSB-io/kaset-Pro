@@ -360,7 +360,7 @@ struct MainWindow: View {
                 .frame(width: ((self.playerService.showLyrics && self.playerService.expandLyrics) || (self.playerService.showQueue && self.playerService.expandQueue)) ? nil : (self.playerService.showQueue && self.playerService.queueDisplayMode == .sidepanel ? 400 : 280))
                 .frame(maxWidth: ((self.playerService.showLyrics && self.playerService.expandLyrics) || (self.playerService.showQueue && self.playerService.expandQueue)) ? .infinity : (self.playerService.showQueue && self.playerService.queueDisplayMode == .sidepanel ? 400 : 280))
                 .padding(.top, 12)
-                .padding(.bottom, 76) // Space for PlayerBar
+                .padding(.bottom, 84) // 16px bottom + 52 player height + 16 margin = 84px
                 .transition(.move(edge: .trailing).combined(with: .opacity))
             }
             .frame(maxWidth: .infinity, alignment: .trailing)
