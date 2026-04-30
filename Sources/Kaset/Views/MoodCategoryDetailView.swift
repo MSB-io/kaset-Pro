@@ -24,7 +24,7 @@ struct MoodCategoryDetailView: View {
                 }
             }
         }
-        .navigationTitle()
+        .navigationTitle(self.viewModel.category.title)
         .onAppear {
             if self.viewModel.loadingState == .idle {
                 Task {
