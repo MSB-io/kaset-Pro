@@ -67,6 +67,7 @@ struct PlayerBar: View {
             .glassEffectID("playerBar", in: self.playerNamespace)
         }
         .frame(maxHeight: self.playerService.expandPlayer ? .infinity : 52, alignment: .bottom)
+        .padding(.top, self.playerService.expandPlayer ? 12 : 0)
         .padding(.horizontal, 16)
         .padding(.bottom, 16)
         .onHover { hovering in
