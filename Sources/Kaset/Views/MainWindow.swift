@@ -338,7 +338,7 @@ struct MainWindow: View {
                 .frame(width: (self.playerService.showLyrics && self.playerService.expandLyrics) ? nil : 280)
                 .frame(maxWidth: (self.playerService.showLyrics && self.playerService.expandLyrics) ? .infinity : 280)
                 .padding(.top, 12)
-                .padding(.bottom, 76) // Space for PlayerBar
+                .padding(.bottom, 74) // Space for PlayerBar
                 .transition(.move(edge: .trailing).combined(with: .opacity))
 
                 Spacer()
