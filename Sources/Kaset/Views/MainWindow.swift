@@ -276,10 +276,23 @@ struct MainWindow: View {
 
     // MARK: - Main Content
 
+    @State private var sidebarWidth: CGFloat = 200
+
     private var mainContent: some View {
         ZStack(alignment: .bottom) {
             NavigationSplitView(columnVisibility: self.$columnVisibility) {
                 Sidebar(selection: self.$navigationSelection)
+                    .background(
+                        GeometryReader { geo in
+                            Color.clear
+                                .onAppear {
+                                    self.sidebarWidth = geo.size.width
+                                }
+                                .onChange(of: geo.size.width) { _, newValue in
+                                    self.sidebarWidth = newValue
+                                }
+                        }
+                    )
             } detail: {
                 self.detailView(for: self.navigationSelection, client: self.client)
                     .safeAreaPadding(.bottom, 80) // Reserve space in all detail views
@@ -289,11 +302,11 @@ struct MainWindow: View {
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
 
-            // Global Player Bar - positioned to respect the sidebar
+            // Global Player Bar - dynamically positioned to respect the sidebar
             HStack(spacing: 0) {
                 if self.columnVisibility == .all || self.columnVisibility == .doubleColumn {
                     Spacer()
-                        .frame(width: 260) // Matches standard macOS sidebar width
+                        .frame(width: self.sidebarWidth)
                 }
                 
                 PlayerBar()
