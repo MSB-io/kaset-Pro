@@ -282,19 +282,19 @@ struct MainWindow: View {
         ZStack(alignment: .bottom) {
             NavigationSplitView(columnVisibility: self.$columnVisibility) {
                 Sidebar(selection: self.$navigationSelection)
+            } detail: {
+                self.detailView(for: self.navigationSelection, client: self.client)
                     .background(
                         GeometryReader { geo in
                             Color.clear
                                 .onAppear {
-                                    self.sidebarWidth = geo.size.width
+                                    self.sidebarWidth = geo.frame(in: .global).minX
                                 }
-                                .onChange(of: geo.size.width) { _, newValue in
+                                .onChange(of: geo.frame(in: .global).minX) { _, newValue in
                                     self.sidebarWidth = newValue
                                 }
                         }
                     )
-            } detail: {
-                self.detailView(for: self.navigationSelection, client: self.client)
                     .safeAreaPadding(.bottom, 80) // Reserve space in all detail views
                     .overlay(alignment: .trailing) {
                         self.rightSidebarOverlay(client: self.client)
