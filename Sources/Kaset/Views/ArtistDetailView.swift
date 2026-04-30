@@ -33,10 +33,6 @@ struct ArtistDetailView: View { // swiftlint:disable:this type_body_length
         .accentBackground(from: self.viewModel.artistDetail?.thumbnailURL?.highQualityThumbnailURL)
         .navigationTitle(self.artist.name)
         .toolbarBackgroundVisibility(.hidden, for: .automatic)
-        .safeAreaInset(edge: .bottom, spacing: 0) {
-            if case .error = self.viewModel.loadingState {} else {
-                PlayerBar()
-            }
         }
         .task {
             if self.viewModel.loadingState == .idle {

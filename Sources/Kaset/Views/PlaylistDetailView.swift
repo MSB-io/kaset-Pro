@@ -63,12 +63,6 @@ struct PlaylistDetailView: View {
         )
         .navigationTitle(self.playlist.title)
         .toolbarBackgroundVisibility(.hidden, for: .automatic)
-        .safeAreaInset(edge: .bottom, spacing: 0) {
-            if case .error = self.viewModel.loadingState {
-            } else {
-                PlayerBar()
-            }
-        }
         .task {
             if self.viewModel.loadingState == .idle {
                 await self.viewModel.load()

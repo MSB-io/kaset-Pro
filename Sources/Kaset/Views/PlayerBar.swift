@@ -31,28 +31,44 @@ struct PlayerBar: View {
 
     var body: some View {
         GlassEffectContainer(spacing: 0) {
-            HStack(spacing: 0) {
-                // Left section: Playback controls
-                self.playbackControls
+            VStack(spacing: 0) {
+                if self.playerService.expandPlayer {
+                    self.expandedHeaderView
+                        .transition(.move(edge: .top).combined(with: .opacity))
 
-                Spacer()
+                    Spacer()
 
-                // Center section: Track info OR seek bar (on hover)
-                self.centerSection
+                    self.largeArtworkView
+                        .transition(.scale(scale: 0.9).combined(with: .opacity))
 
-                Spacer()
+                    Spacer()
+                }
 
-                // Right section: Volume control
-                self.volumeControl
+                HStack(spacing: 0) {
+                    // Left section: Playback controls
+                    self.playbackControls
+
+                    Spacer()
+
+                    // Center section: Track info OR seek bar (on hover)
+                    self.centerSection
+
+                    Spacer()
+
+                    // Right section: Volume control
+                    self.volumeControl
+                }
+                .padding(.horizontal, 20)
+                .frame(height: 52)
             }
-            .padding(.horizontal, 20)
-            .padding(.vertical, 8)
-            .frame(height: 52)
-            .glassEffect(.regular.interactive(), in: .capsule)
+            .frame(maxWidth: .infinity)
+            .frame(height: self.playerService.expandPlayer ? nil : 52)
+            .glassEffect(.regular.interactive(), in: .rect(cornerRadius: self.playerService.expandPlayer ? 20 : 26))
             .glassEffectID("playerBar", in: self.playerNamespace)
         }
+        .frame(maxHeight: self.playerService.expandPlayer ? .infinity : 52, alignment: .bottom)
         .padding(.horizontal, 16)
-        .padding(.bottom, 12)
+        .padding(.bottom, 16)
         .onHover { hovering in
             withAnimation(.easeInOut(duration: 0.15)) {
                 self.isHovering = hovering
@@ -452,6 +468,21 @@ struct PlayerBar: View {
                     }
                 }
             }
+
+            // Expand toggle button
+            Button {
+                HapticService.toggle()
+                withAnimation(.spring(duration: 0.45, bounce: 0.15)) {
+                    self.playerService.expandPlayer.toggle()
+                }
+            } label: {
+                Image(systemName: self.playerService.expandPlayer ? "chevron.down" : "chevron.up")
+                    .font(.system(size: 14, weight: .bold))
+                    .foregroundStyle(.secondary)
+            }
+            .buttonStyle(.pressable)
+            .padding(.leading, 8)
+            .help(self.playerService.expandPlayer ? String(localized: "Collapse Player") : String(localized: "Expand Player"))
         }
     }
 
@@ -565,6 +596,39 @@ struct PlayerBar: View {
             return "speaker.wave.1.fill"
         } else {
             return "speaker.wave.2.fill"
+        }
+    }
+
+    // MARK: - Expanded Mega Card Views
+
+    private var expandedHeaderView: some View {
+        HStack {
+            Text("Now Playing")
+                .font(.system(size: 13, weight: .bold))
+                .foregroundStyle(.secondary)
+                .textCase(.uppercase)
+                .tracking(1.0)
+
+            Spacer()
+        }
+        .padding(.horizontal, 24)
+        .padding(.top, 16)
+    }
+
+    private var largeArtworkView: some View {
+        VStack(spacing: 24) {
+            if let track = self.playerService.currentTrack {
+                SongThumbnailView(song: track, size: 320, cornerRadius: 16)
+                    .shadow(color: .black.opacity(0.3), radius: 20, x: 0, y: 10)
+            } else {
+                RoundedRectangle(cornerRadius: 16)
+                    .fill(.quaternary)
+                    .overlay {
+                        CassetteIcon(size: 100)
+                            .foregroundStyle(.secondary)
+                    }
+                    .frame(width: 320, height: 320)
+            }
         }
     }
 }

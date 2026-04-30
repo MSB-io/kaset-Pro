@@ -41,9 +41,6 @@ struct SearchView: View {
             .localizedNavigationTitle("Search")
             .navigationDestinations(client: self.viewModel.client)
         }
-        .safeAreaInset(edge: .bottom, spacing: 0) {
-            PlayerBar()
-        }
         .onAppear {
             self.isSearchFieldFocused = true
         }

@@ -106,9 +106,6 @@ struct LibraryView: View {
             }
         }
         .environment(self.viewModel)
-        .safeAreaInset(edge: .bottom, spacing: 0) {
-            PlayerBar()
-        }
         .task {
             if self.viewModel.loadingState == .idle {
                 await self.viewModel.load()

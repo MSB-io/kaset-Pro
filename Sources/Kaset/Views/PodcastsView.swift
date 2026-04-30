@@ -41,9 +41,6 @@ struct PodcastsView: View {
             }
             .navigationDestinations(client: self.viewModel.client)
         }
-        .safeAreaInset(edge: .bottom, spacing: 0) {
-            PlayerBar()
-        }
         .onAppear {
             if self.viewModel.loadingState == .idle {
                 Task {
@@ -283,9 +280,6 @@ struct PodcastShowView: View {
                 continuationToken: self.continuationToken,
                 client: self.client
             )
-        }
-        .safeAreaInset(edge: .bottom, spacing: 0) {
-            PlayerBar()
         }
         .task {
             await self.loadShow()
@@ -617,9 +611,6 @@ struct AllEpisodesView: View {
         }
         .accentBackground(from: self.show.thumbnailURL)
         .localizedNavigationTitle("All Episodes")
-        .safeAreaInset(edge: .bottom, spacing: 0) {
-            PlayerBar()
-        }
         .onAppear {
             // Initialize with episodes passed from parent
             if self.episodes.isEmpty {

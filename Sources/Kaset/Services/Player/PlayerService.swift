@@ -173,6 +173,9 @@ final class PlayerService: NSObject, PlayerServiceProtocol {
     /// Whether the queue panel is expanded to fill the content area.
     var expandQueue: Bool = false
 
+    /// Whether the player bar is currently expanded into the mega card view.
+    var expandPlayer: Bool = false
+
     /// Whether the current track has video available.
     var currentTrackHasVideo: Bool = false
 

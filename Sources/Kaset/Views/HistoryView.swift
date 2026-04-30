@@ -54,9 +54,6 @@ struct HistoryView: View {
             }
             .navigationDestinations(client: self.viewModel.client)
         }
-        .safeAreaInset(edge: .bottom, spacing: 0) {
-            PlayerBar()
-        }
         .task {
             if self.viewModel.loadingState == .idle {
                 await self.viewModel.load()

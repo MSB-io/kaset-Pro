@@ -283,8 +283,12 @@ struct MainWindow: View {
                 Sidebar(selection: self.$navigationSelection)
             } detail: {
                 self.detailView(for: self.navigationSelection, client: self.client)
+                    .safeAreaPadding(.bottom, 80) // Space for PlayerBar (52 height + 16 bottom + 12 buffer)
                     .overlay(alignment: .trailing) {
                         self.rightSidebarOverlay(client: self.client)
+                    }
+                    .overlay(alignment: .bottom) {
+                        PlayerBar()
                     }
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
