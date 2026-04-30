@@ -68,7 +68,7 @@ struct PlayerBar: View {
         }
         .frame(maxHeight: self.playerService.expandPlayer ? .infinity : 52, alignment: .bottom)
         .padding(.horizontal, 16)
-        .padding(.bottom, 16)
+        .padding(.vertical, 16)
         .onHover { hovering in
             withAnimation(.easeInOut(duration: 0.15)) {
                 self.isHovering = hovering
