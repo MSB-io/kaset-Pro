@@ -321,8 +321,6 @@ struct MainWindow: View {
 
         if showRightSidebar {
             VStack(spacing: 0) {
-                Spacer()
-
                 Group {
                     if self.playerService.showLyrics {
                         LyricsView(client: client)
@@ -338,10 +336,8 @@ struct MainWindow: View {
                 .frame(width: (self.playerService.showLyrics && self.playerService.expandLyrics) ? nil : 280)
                 .frame(maxWidth: (self.playerService.showLyrics && self.playerService.expandLyrics) ? .infinity : 280)
                 .padding(.top, 12)
-                .padding(.bottom, 74) // Space for PlayerBar
+                .padding(.bottom, 72) // Space for PlayerBar
                 .transition(.move(edge: .trailing).combined(with: .opacity))
-
-                Spacer()
             }
             .padding(.horizontal, 16)
         }
