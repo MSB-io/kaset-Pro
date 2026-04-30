@@ -277,21 +277,18 @@ struct MainWindow: View {
     // MARK: - Main Content
 
     private var mainContent: some View {
-        ZStack(alignment: .bottom) {
-            // Main navigation content
-            NavigationSplitView(columnVisibility: self.$columnVisibility) {
-                Sidebar(selection: self.$navigationSelection)
-            } detail: {
+        NavigationSplitView(columnVisibility: self.$columnVisibility) {
+            Sidebar(selection: self.$navigationSelection)
+        } detail: {
+            ZStack(alignment: .bottom) {
                 self.detailView(for: self.navigationSelection, client: self.client)
                     .safeAreaPadding(.bottom, 80) // Space for PlayerBar (52 height + 16 bottom + 12 buffer)
-                    .overlay(alignment: .trailing) {
-                        self.rightSidebarOverlay(client: self.client)
-                    }
-            }
-            .frame(maxWidth: .infinity, maxHeight: .infinity)
 
-            // Global Player Bar
-            PlayerBar()
+                PlayerBar()
+            }
+            .overlay(alignment: .trailing) {
+                self.rightSidebarOverlay(client: self.client)
+            }
         }
         .onReceive(NotificationCenter.default.publisher(for: NSWindow.didBecomeKeyNotification)) { _ in
                 // Ensure the sidebar returns when the app is re-activated from the Dock or app switcher.
