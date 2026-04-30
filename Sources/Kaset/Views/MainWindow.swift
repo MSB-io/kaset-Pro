@@ -295,7 +295,7 @@ struct MainWindow: View {
                                 }
                         }
                     )
-                    .safeAreaPadding(.bottom, 100) // Space for PlayerBar (52 height + 32 vertical padding + buffer)
+                    .safeAreaPadding(.bottom, 80) // Reserve space in all detail views
                     .overlay(alignment: .trailing) {
                         self.rightSidebarOverlay(client: self.client)
                     }
