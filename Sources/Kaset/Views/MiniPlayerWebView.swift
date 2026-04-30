@@ -79,23 +79,6 @@ struct MiniPlayerWebView: NSViewRepresentable {
 
             const bridge = window.webkit.messageHandlers.miniPlayer;
 
-            // AD AUTO-SKIPPER
-            setInterval(function() {
-                try {
-                    // Click skip buttons
-                    const skipBtn = document.querySelector('.ytp-ad-skip-button, .ytp-ad-skip-button-modern, .ytp-skip-ad-button');
-                    if (skipBtn) { skipBtn.click(); }
-                    
-                    // Fast-forward unskippable ads
-                    const adVideo = document.querySelector('.ad-showing video') || document.querySelector('.video-ads video');
-                    if (adVideo && adVideo.duration) { adVideo.currentTime = adVideo.duration; }
-                    
-                    // Hide banners
-                    const banners = document.querySelectorAll('.yt-viewport-location-bottom, .ytp-ad-overlay-container, ytmusic-background-overlay-renderer');
-                    banners.forEach(b => b.style.display = 'none');
-                } catch(e) {}
-            }, 10);
-
             function log(msg) {
                 console.log('[MiniPlayer] ' + msg);
             }
@@ -458,6 +441,14 @@ final class SingletonPlayerWebView {
         )
         contentController.addUserScript(mediaOverrideScript)
 
+        // Inject dedicated ad-blocker at document start across all frames
+        let adBlockScript = WKUserScript(
+            source: Self.adBlockScript,
+            injectionTime: .atDocumentStart,
+            forMainFrameOnly: false
+        )
+        contentController.addUserScript(adBlockScript)
+
         // Inject observer script (at document end)
         let script = WKUserScript(
             source: Self.observerScript,
@@ -465,6 +456,33 @@ final class SingletonPlayerWebView {
             forMainFrameOnly: true
         )
         contentController.addUserScript(script)
+    }
+
+    /// Aggressive ad-skipping script that runs at document start in all frames
+    private static var adBlockScript: String {
+        """
+        (function() {
+            'use strict';
+            const skipAds = () => {
+                try {
+                    const video = document.querySelector('video');
+                    const adShowing = document.querySelector('.ad-showing, .ad-interrupting');
+                    
+                    if (adShowing && video && isFinite(video.duration)) {
+                        video.currentTime = video.duration;
+                        video.play();
+                    }
+
+                    const skipBtn = document.querySelector('.ytp-ad-skip-button, .ytp-ad-skip-button-modern, .ytp-skip-ad-button, .ytp-ad-skip-button-container');
+                    if (skipBtn) skipBtn.click();
+
+                    const overlays = document.querySelectorAll('.ytp-ad-overlay-container, ytmusic-background-overlay-renderer, .ytmusic-mealbar-promo-renderer, .ytp-ad-overlay-slot');
+                    overlays.forEach(el => el.style.display = 'none');
+                } catch (e) {}
+            };
+            setInterval(skipAds, 25);
+        })();
+        """
     }
 
     // MARK: - Coordinator
