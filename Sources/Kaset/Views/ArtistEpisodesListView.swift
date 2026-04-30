@@ -32,7 +32,6 @@ struct ArtistEpisodesListView: View {
         }
         .navigationTitle(self.viewModel.destination.sectionTitle)
         .toolbarBackgroundVisibility(.hidden, for: .automatic)
-        }
         .task {
             if self.viewModel.loadingState == .idle {
                 await self.viewModel.load()

@@ -38,7 +38,6 @@ struct TopSongsView: View {
         }
         .navigationTitle(self.viewModel.title)
         .toolbarBackgroundVisibility(.hidden, for: .automatic)
-        }
         .task {
             if self.viewModel.loadingState == .idle {
                 await self.viewModel.load()
