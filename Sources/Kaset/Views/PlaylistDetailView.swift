@@ -61,7 +61,7 @@ struct PlaylistDetailView: View {
         .accentBackground(
             from: self.viewModel.playlistDetail?.thumbnailURL?.highQualityThumbnailURL
         )
-        .navigationTitle("")
+        .navigationTitle(self.playlist.title)
         .toolbarBackgroundVisibility(.hidden, for: .automatic)
         .task {
             if self.viewModel.loadingState == .idle {
